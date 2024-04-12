@@ -1,0 +1,58 @@
+{% extends 'layouts/base.html' %}
+{% block content %}
+  <button type="button" id="expenseButton" class="btn btn-primary m-3" data-bs-toggle="modal" data-bs-target="#expenseModal">Add Expense</button>
+  <div class="p-0">
+    <div class="content-section">
+      <h3 id="remain-budget"></h3>
+    </div>
+  </div>
+
+  <table id="expensesTable" class="table table-striped" style="width:100%">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Amount</th>
+      </tr>
+    </thead>
+    <tbody id="expenses"></tbody>
+    <tfoot>
+      <tr>
+        <th>Total</th>
+        <th id="total-expense"></th>
+      </tr>
+    </tfoot>
+  </table>
+
+  {% comment %}modal for adding expense{% endcomment %}
+  <div class="modal fade" id="expenseModal" tabindex="-1" aria-labelledby="expenseModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="expenseModalLabel">Add Expense</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form method="POST">
+            <input type="hidden" value="{{ b_id }}" id="b_id" />
+            <div class="mb-3">
+              <label for="expense-description" class="col-form-label">What is the thing that you bought?</label>
+              <input type="text" class="form-control" id="expense-description" />
+            </div>
+            <div class="mb-3">
+              <label for="expense-amount" class="col-form-label">How much is it?</label>
+              <input type="number" class="form-control" id="expense-amount" />
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" id="save-expense" class="btn btn-primary">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    new DataTable('#expensesTable')
+  </script>
+{% endblock %}
