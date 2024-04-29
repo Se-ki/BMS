@@ -1,26 +1,22 @@
-$(document).ready(() => {
-    const eDescription = document.getElementById('expense-description')
-    const eAmount = document.getElementById('expense-amount')
-    const b_id = document.getElementById('b_id')
-    const expenseButton = document.getElementById('expenseButton')
-
+$(function () {
     let getThatAmount = ''
 
     async function expenses() {
         try {
-            const response = await axios.get(`/get-expenses/?b_id=${b_id.value}`);
+            const response = await axios.get(`/get-expenses/?b_id=${$("#b_id").val()}`);
             let expenses = response.data.expenses
             let budgetAmount = response.data.b_amount
+            let totalExpense = 0
             getThatAmount = budgetAmount
-
-            let total = 0
+            expenses.map(expense => totalExpense += parseInt(expense.expense_amount))
+            $("#total-expense").html('Total Expense: ' + totalExpense)
             $("#remain-budget").html('Remaining Budget: ' + budgetAmount)
             if (parseInt(budgetAmount) <= 0) {
-                expenseButton.disabled = true
+                $("#expenseButton").prop("disabled", true)
             }
             $("#expensesTable").DataTable({
                 data: expenses,
-                // destroy: true, //to able to reinitialize
+                destroy: true, //to able to reinitialize
                 responsive: true,
                 columns: [
                     {
@@ -36,15 +32,9 @@ $(document).ready(() => {
                     },
                     {
                         data: "expense_amount",
-                        render: function (data, type, row) {
-                            total += parseFloat(data)
-                            console.log(row)
-                            return data
-                        },
                     },
                 ],
             })
-            $("#total-expense").html('Total Expense: ' + total)
         } catch (error) {
             console.error(error);
         }
@@ -52,28 +42,27 @@ $(document).ready(() => {
 
     $("#save-expense").on('click', async (e) => {
         e.preventDefault()
-        if (parseFloat(eAmount.value) > parseFloat(getThatAmount)) {
+        if (parseFloat($('#expense-amount').val()) > parseFloat(getThatAmount)) {
             alert('The value is greater than the remaining budget!')
         } else {
-            const data = {
-                expense_dscrption: eDescription.value,
-                expense_amnt: eAmount.value,
-                b_id: b_id.value
+            try {
+                const jsonData = {
+                    expenseDescription: $('#expense-description').val(),
+                    expenseAmount: $('#expense-amount').val(),
+                    budgetId: $("#b_id").val()
+                }
+                const response = await axios.post("/add-expense/", jsonData)
+                console.log(response)
+                $('#expense-description').val("")
+                $('#expense-amount').val("")
+                $("#expenseModal").modal("hide")
+                expenses()
+            } catch (error) {
+                console.error(error)
             }
-            jsonData = JSON.stringify(data)
-            const response = await fetch('/add-expense/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: jsonData
-            })
-            const json = await response.json()
-            eDescription.value = ""
-            eAmount.value = ""
-            $("#expenseModal").modal("hide")
-            expenses()
         }
     })
+
+    // initialize to see expenses data
     expenses()
 })

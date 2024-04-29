@@ -88,14 +88,13 @@ def addBudget(request):
 @login_required
 @csrf_exempt
 def addExpenses(request):
-    json_data = list(request.POST.keys())[0]
-    data_dict = json.loads(json_data)
-    expense_description = data_dict.get("expense_dscrption")
-    expense_amount = data_dict.get("expense_amnt")
-    budget_id = data_dict.get("b_id")
-    budget = Budget.objects.filter(id=budget_id).get()
-    remaining_budget = float(budget.budget_amount) - float(expense_amount)
-    addExpense = Expense(description=expense_description, expense_amount=expense_amount, user=request.user, budget=budget)
+    data = json.load(request)
+    e_description = data.get("expenseDescription")
+    e_amount = data.get("expenseAmount")
+    b_id = data.get("budgetId")
+    budget = Budget.objects.filter(id=b_id).get()
+    remaining_budget = float(budget.budget_amount) - float(e_amount)
+    addExpense = Expense(description=e_description, expense_amount=e_amount, user=request.user, budget=budget)
     budget.budget_amount = remaining_budget
     addExpense.save()
     budget.save()
