@@ -167,8 +167,6 @@ if ($("#expensesTable")[0]) {
 
             const response = await axios.get(`/get-expenses/?b_id=${bId}`);
 
-            console.log(response);
-
             let expenses = response.data.expenses;
 
             let budgetAmount = response.data.b_amount;
