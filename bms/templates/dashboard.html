@@ -1,58 +1,109 @@
-{% extends 'layouts/base.html' %}
+{% extends 'layouts/base.html' %} {% block content %}
+<div class="m-3">
+  <button
+    type="button"
+    class="btn btn-primary"
+    data-bs-toggle="modal"
+    data-bs-target="#addBudget"
+  >
+    Add Budget
+  </button>
+</div>
+<div id="get-budgets"></div>
 
-{% block content %}
-  <div class="m-3">
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addBudget">Add Budget</button>
-  </div>
-  <div id="get-budgets"></div>
-  
-  {% comment %}modal for adding budget{% endcomment %}
-  <div class="modal fade" id="addBudget" tabindex="1" aria-labelledby="addBudgetLabel" aria-hidden="false">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h2 class="modal-title fs-5" id="add">Add Budget</h2>
-          <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close">X</button>
-        </div>
-        <div class="modal-body bg-dark">
-          <form method="POST">
-            {% csrf_token %}
-            <div class="mb-3">
-              <label class="text-light" for="description">What is this budget all about?</label>
-              <input type="text" placeholder="Enter Description" class="form-control" id="description" />
-            </div>
-            <div class="mb-3">
-              <label class="text-light" for="budget">How much is your budget, please input:</label>
-              <input type="number" placeholder="Enter Budget Amount" class="form-control" id="budget" />
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" id="add-budget" class="btn btn-primary">Save</button>
-        </div>
+{% comment %}modal for adding budget{% endcomment %}
+<div
+  class="modal fade"
+  id="addBudget"
+  tabindex="1"
+  aria-labelledby="addBudgetLabel"
+  aria-hidden="false"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title fs-5" id="add">Add Budget</h2>
+        <button
+          type="button"
+          class="btn-close btn-sm"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        >
+          X
+        </button>
+      </div>
+      <div class="modal-body bg-dark">
+        <form method="POST">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label class="text-light" for="description"
+              >What is this budget all about?</label
+            >
+            <input
+              type="text"
+              placeholder="Enter Description"
+              class="form-control"
+              id="description"
+            />
+          </div>
+          <div class="mb-3">
+            <label class="text-light" for="budget"
+              >How much is your budget, please input:</label
+            >
+            <input
+              type="number"
+              placeholder="Enter Budget Amount"
+              class="form-control"
+              id="budget"
+            />
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button type="button" id="add-budget" class="btn btn-primary">
+          Save
+        </button>
       </div>
     </div>
   </div>
+</div>
 
-  {% comment %}modal for editing budget{% endcomment %}
-  <div class="modal fade" id="editBudget" tabindex="-1" aria-labelledby="editBudgetLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h2 class="modal-title fs-5" id="add">Edit Budget</h2>
-          <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close">X</button>
-        </div>
-        <div class="modal-body bg-dark">
-          <form method="POST" id="edit-budget-form">
-            {% csrf_token %}
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" id="edit-budget" class="btn btn-primary">Save</button>
-        </div>
+{% comment %}modal for editing budget{% endcomment %}
+<div
+  class="modal fade"
+  id="editBudget"
+  tabindex="-1"
+  aria-labelledby="editBudgetLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title fs-5" id="add">Edit Budget</h2>
+        <button
+          type="button"
+          class="btn-close btn-sm"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        >
+          X
+        </button>
+      </div>
+      <div class="modal-body bg-dark">
+        <form method="POST" id="edit-budget-form">{% csrf_token %}</form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button type="button" id="edit-budget" class="btn btn-primary">
+          Save
+        </button>
       </div>
     </div>
   </div>
+</div>
 {% endblock %}
