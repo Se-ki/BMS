@@ -1,17 +1,56 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const expense = document.getElementById('save-expense')
+$(document).ready(() => {
     const eDescription = document.getElementById('expense-description')
     const eAmount = document.getElementById('expense-amount')
-    const expenseTBody = document.getElementById('expenses')
     const b_id = document.getElementById('b_id')
-    const total_expense = document.getElementById('total-expense')
-    const remain_budget = document.getElementById('remain-budget')
     const expenseButton = document.getElementById('expenseButton')
-    const modalExpense = new bootstrap.Modal(document.getElementById('expenseModal'))
-    const dataTable = new DataTable('#expensesTable')
 
     let getThatAmount = ''
-    expense.addEventListener('click', async (e) => {
+
+    async function expenses() {
+        try {
+            const response = await axios.get(`/get-expenses/?b_id=${b_id.value}`);
+            let expenses = response.data.expenses
+            let budgetAmount = response.data.b_amount
+            getThatAmount = budgetAmount
+
+            let total = 0
+            $("#remain-budget").html('Remaining Budget: ' + budgetAmount)
+            if (parseInt(budgetAmount) <= 0) {
+                expenseButton.disabled = true
+            }
+            $("#expensesTable").DataTable({
+                data: expenses,
+                // destroy: true, //to able to reinitialize
+                responsive: true,
+                columns: [
+                    {
+                        data: null,
+                        render: function (data, type, full, meta) {
+                            // Use meta.row to get the row index, and add 1 to start from 1
+                            return meta.row + 1;
+                        },
+                        name: 'id',
+                    },
+                    {
+                        data: "description",
+                    },
+                    {
+                        data: "expense_amount",
+                        render: function (data, type, row) {
+                            total += parseFloat(data)
+                            console.log(row)
+                            return data
+                        },
+                    },
+                ],
+            })
+            $("#total-expense").html('Total Expense: ' + total)
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    $("#save-expense").on('click', async (e) => {
         e.preventDefault()
         if (parseFloat(eAmount.value) > parseFloat(getThatAmount)) {
             alert('The value is greater than the remaining budget!')
@@ -32,35 +71,9 @@ document.addEventListener("DOMContentLoaded", () => {
             const json = await response.json()
             eDescription.value = ""
             eAmount.value = ""
-            modalExpense.hide()
-            getExpenses()
+            $("#expenseModal").modal("hide")
+            expenses()
         }
     })
-    async function getExpenses() {
-        const response = await fetch(
-            '/get-expenses/?' +
-            new URLSearchParams({
-                b_id: b_id.value
-            })
-        )
-        const json = await response.json()
-        const expenses = json.expenses
-        budget_amount = json.b_amount
-        getThatAmount = budget_amount
-        let table = ''
-        let total = 0
-        expenses.map((data) => {
-            total += parseFloat(data.expense_amount)
-            table += `<tr>                                                                                                                            <td>${data.description}</td>                                                         
-                   <td>${data.expense_amount}</td>                                                      
-                 </tr>`
-        })
-        expenseTBody.innerHTML = table
-        total_expense.innerHTML = '₱' + total
-        remain_budget.innerHTML = 'Remaining Budget: ' + budget_amount
-        if (parseInt(budget_amount) <= 0) {
-            expenseButton.disabled = true
-        }
-    }
-    getExpenses()
+    expenses()
 })
