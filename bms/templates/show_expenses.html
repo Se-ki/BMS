@@ -1,0 +1,60 @@
+{% extends 'layouts/base.html' %} 
+{% block content %}
+
+   <main role="main" class="container">
+      <div class="row">
+        <div class="col-md-6 m-auto"></div>
+      </div>  
+    
+  <div class="m-3 text-center mt-4 position-relative m-auto">
+    {% comment %} //para backup // <button type="button" id="expenseButton" class="btn btn-primary m-3" data-bs-toggle="modal" data-bs-target="#expenseModal">Add Expense</button> {% endcomment %}
+    <button type="button" id="expenseButton" class="add-btn m-auto mt-lg-3" data-bs-toggle="modal" data-bs-target="#expenseModal">
+      <span class="button__text">Add Expense</span>
+    </button>
+    <div class="p-0 mt-4">
+      <div class="content-section" id="content-budget">
+        <h3 id="remain-budget"></h3>
+        <h3 id="total-expense"></h3>
+      </div>
+    </div>
+  </div>
+
+  <table id="expensesTable" class="table table-striped" style="width: 100%">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Amount</th>
+      </tr>
+    </thead>
+  </table>
+</main> 
+  {% comment %}modal for adding expense{% endcomment %}
+  <div class="modal fade" id="expenseModal" tabindex="-1" aria-labelledby="expenseModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="expenseModalLabel">Add Expense</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
+        </div>
+        <div class="modal-body bg-dark">
+          <form method="POST">
+            <input type="hidden" value="{{ bId }}" id="b_id" />
+            <div class="mb-3">
+              <label for="expense-description" class="col-form-label text-light">What is the thing that you bought?</label>
+              <input type="text" class="form-control" id="expense-description" placeholder="Enter Description" />
+            </div>
+            <div class="mb-3">
+              <label for="expense-amount" class="col-form-label text-light">How much is it?</label>
+              <input type="number" class="form-control" id="expense-amount" placeholder="Enter Budget Amount" />
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" id="save-expense" class="btn btn-primary">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
