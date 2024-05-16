@@ -1,15 +1,17 @@
 {% extends 'layouts/base.html' %} {% block content %}
-<div class="m-3">
-  <button
-    type="button"
-    class="btn btn-primary"
-    data-bs-toggle="modal"
-    data-bs-target="#addBudget"
-  >
-    Add Budget
-  </button>
+<div class="ad-bgt col-md-6">
+  <div class="m-3">
+    <button
+      type="button"
+      class="btn btn-primary"
+      data-bs-toggle="modal"
+      data-bs-target="#addBudget"
+    >
+      Add Budget
+    </button>
+  </div>
+  <div id="get-budgets"></div>
 </div>
-<div id="get-budgets"></div>
 
 {% comment %}modal for adding budget{% endcomment %}
 <div

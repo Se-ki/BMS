@@ -166,7 +166,7 @@ if ($("#expensesTable")[0]) {
             let bId = $("#b_id").val();
 
             const response = await axios.get(`/get-expenses/?b_id=${bId}`);
-
+            
             let expenses = response.data.expenses;
 
             let budgetAmount = response.data.b_amount;
